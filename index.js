@@ -17,7 +17,6 @@ server.route({
   method: 'POST',
   path: '/todo',
   handler: (request, reply) => {
-    let channel = request.payload.channel_id;
     let userId = request.payload.user_id;
     let teamId = request.payload.team_id;
     let key = `${teamId}_${userId}`;
@@ -37,7 +36,7 @@ server.route({
           response = showList(key);
           break;
         case 'show':
-          response = showList(key, channel);
+          response = showList(key, true);
           break;
         case 'add':
           response = addTodo(key, message);
@@ -73,19 +72,21 @@ function showHelp(unknownCommand) {
   };
 }
 
-function showList(key, channel) {
+function showList(key, toChannel) {
+  let usersTodoList = todos.getTodos(key);
 
-  // TODO: Get user's todos
+  // TODO: Format todos
 
   return {
     text: '',
-    in_channel: channel !== undefined
+    in_channel: toChannel
   };
 }
 
 function addTodo(key, message) {
+  let newTodo = todos.addTodo(key, message);
 
-  // TODO: Add new todo item
+  // TODO: Display new todo
 
   return {
     text: '',
@@ -94,8 +95,9 @@ function addTodo(key, message) {
 }
 
 function completeTodo(key, todoId) {
+  todos.completeTodo(key, todoId);
 
-  // TODO: Mark todo item as completed
+  // TODO: Show completed todo
 
   return {
     text: '',
@@ -104,8 +106,9 @@ function completeTodo(key, todoId) {
 }
 
 function removeTodo(key, todoId) {
+  todos.removeTodo(key, todoId);
 
-  // TODO: Remove todo item
+  // TODO: Confirm remove
 
   return {
     text: '',
