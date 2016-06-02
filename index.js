@@ -63,7 +63,7 @@ function showHelp(unknownCommand) {
   }
 
   for(let validAction in validActions) {
-    helpMessage += `*${validAction}:* ${validActions[validAction]}`
+    helpMessage += `*${validAction}:* ${validActions[validAction]}\n`
   }
 
   return {
