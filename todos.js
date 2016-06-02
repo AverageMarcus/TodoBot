@@ -63,15 +63,13 @@ module.exports = {
             return reject();
           }
           var todoItem = doc.todos[todoId];
-          console.log(JSON.stringify(doc.todos));
           doc.todos = doc.todos.map((todo, index) => {
-            if(index != todoId) {
+            if(index == todoId) {
               return undefined;
             } else {
               return todo;
             }
           });
-          console.log(JSON.stringify(doc.todos));
           doc.save(function(err) {
             return resolve({id: todoId, message: todoItem.message});
           });
