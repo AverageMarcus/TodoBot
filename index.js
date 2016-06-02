@@ -75,7 +75,7 @@ function showHelp(unknownCommand) {
 function showList(key, toChannel) {
   let usersTodoList = todos.getTodos(key);
 
-  let message;
+  let message = '';
 
   if(!usersTodoList || !usersTodoList.length) {
     message = 'You currently have an empty todo list! :smile:';
