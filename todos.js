@@ -3,12 +3,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const connection = mongoose.createConnection(process.env.MONGODB_URL);
 
-const todoSchema = new Schema({
-  message: String
-});
 const userSchema = new Schema({
   key: String,
-  todos: [todoSchema]
+  todos: Array
 });
 let UserTodos = connection.model('UserTodos', userSchema);
 
