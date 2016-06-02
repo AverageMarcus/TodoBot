@@ -36,13 +36,22 @@ module.exports = {
           var todoItem = {
             message: message
           };
-          let newId = doc.todos.indexOf(undefined);
+
+          var newId = doc.todos.findIndex(todo => todo == undefined);
+
           if(newId >= 0) {
-            doc.todos[newId] = todoItem;
+            doc.todos = doc.todos.map((todo, index) => {
+              if(index == newId) {
+                return todoItem;
+              } else {
+                return todo;
+              }
+            });
           } else {
             doc.todos.push(todoItem);
             newId = doc.todos.length - 1;
           }
+
           doc.save(function(err) {
             return resolve({id: newId, message: todoItem.message});
           });
