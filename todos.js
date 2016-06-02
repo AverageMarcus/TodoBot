@@ -39,9 +39,9 @@ module.exports = {
           var todoItem = {
             message: message
           };
-          let newId = doc.todos.indexOf(undefined);
+          let newId = doc.todos.indexOf(null);
           if(newId >= 0) {
-            doc.todos[doc.todos.indexOf(undefined)] = todoItem;
+            doc.todos[newId] = todoItem;
           } else {
             doc.todos.push(todoItem);
             newId = doc.todos.length - 1;
@@ -55,7 +55,7 @@ module.exports = {
   getTodos: function(key) {
     return ensureKeyExists(key)
       .then(doc => {
-        return doc.todos.filter(todo => todo != undefined);
+        return doc.todos.filter(todo => todo != null);
       });
   },
   completeTodo: function(key, todoId) {
@@ -66,7 +66,7 @@ module.exports = {
             return reject();
           }
           var todoItem = doc.todos[todoId];
-          doc.todos[todoId] = undefined;
+          doc.todos[todoId] = null;
           doc.save(function(err) {
             return resolve({id: todoId, message: todoItem.message});
           });
