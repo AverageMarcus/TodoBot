@@ -94,18 +94,14 @@ function showList(key, toChannel) {
 function addTodo(key, message) {
   let newTodo = todos.addTodo(key, message);
 
-  // TODO: Display new todo
-
   return {
-    text: `:white_medium_square: [${todo.id}] ${todo.message}`,
+    text: `:white_medium_square: [${newTodo.id}] ${newTodo.message}`,
     in_channel: false
   };
 }
 
 function completeTodo(key, todoId) {
   let completedTodo = todos.completeTodo(key, todoId);
-
-  // TODO: Show completed todo
 
   return {
     text: `:ballot_box_with_check: [${completedTodo.id}] ${completedTodo.message}\n`,
