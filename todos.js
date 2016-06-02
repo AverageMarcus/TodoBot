@@ -15,18 +15,18 @@ let UserTodos = connection.model('UserTodos', userSchema);
 
 function ensureKeyExists(key) {
   return new Promise((resolve, reject) => {
-    UserTodos.find({key: key}, function(err, docs) {
-      if(!docs.length) {
+    UserTodos.findOne({key: key}, function(err, doc) {
+      if(!doc) {
         let userTodo = new UserTodos({
           key: key,
           todos: [],
           itemIndex: 0
         });
         userTodo.save(function(err) {
-          return resolve();
+          return resolve(userTodo);
         });
       } else {
-        return resolve();
+        return resolve(doc);
       }
     });
   });
@@ -35,41 +35,33 @@ function ensureKeyExists(key) {
 module.exports = {
   addTodo: function(key, message) {
     return ensureKeyExists(key)
-      .then(() => {
+      .then(doc => {
         return new Promise((resolve, reject) => {
-          UserTodos.findOne({key: key}, function(err, doc) {
-            var todoItem = {
-              message: message
-            };
+          var todoItem = {
+            message: message
+          };
 
-            doc.todos.push(todoItem);
-            doc.save(function(err) {
-              return resolve({id: doc.todos.length, message: todoItem.message});
-            });
+          doc.todos.push(todoItem);
+          doc.save(function(err) {
+            return resolve({id: doc.todos.length, message: todoItem.message});
           });
         });
       });
   },
   getTodos: function(key) {
     return ensureKeyExists(key)
-      .then(() => {
-        return new Promise((resolve, reject) => {
-          UserTodos.findOne({key: key}, function(err, doc) {
-            return resolve(doc.todos.filter(todo => todo.completed === undefined));
-          });
-        });
+      .then(doc => {
+        return doc.todos.filter(todo => todo.completed === undefined);
       });
   },
   completeTodo: function(key, todoId) {
     return ensureKeyExists(key)
-      .then(() => {
+      .then(doc => {
         return new Promise((resolve, reject) => {
-          UserTodos.findOne({key: key}, function(err, doc) {
-            var todoItem = doc.todos[todoId];
-            doc.todos.splice(todoId, 1);
-            doc.save(function(err) {
-              return resolve(todoItem);
-            });
+          var todoItem = doc.todos[todoId];
+          doc.todos.splice(todoId, 1);
+          doc.save(function(err) {
+            return resolve(todoItem);
           });
         });
       });
