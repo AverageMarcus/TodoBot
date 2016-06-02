@@ -39,10 +39,15 @@ module.exports = {
           var todoItem = {
             message: message
           };
-
-          doc.todos.push(todoItem);
+          let newId = doc.todos.indexOf(undefined);
+          if(newId >= 0) {
+            doc.todos[doc.todos.indexOf(undefined)] = todoItem;
+          } else {
+            doc.todos.push(todoItem);
+            newId = doc.todos.length - 1;
+          }
           doc.save(function(err) {
-            return resolve({id: doc.todos.length-1, message: todoItem.message});
+            return resolve({id: newId, message: todoItem.message});
           });
         });
       });
@@ -50,7 +55,7 @@ module.exports = {
   getTodos: function(key) {
     return ensureKeyExists(key)
       .then(doc => {
-        return doc.todos;
+        return doc.todos.filter(todo => todo != undefined);
       });
   },
   completeTodo: function(key, todoId) {
@@ -58,7 +63,7 @@ module.exports = {
       .then(doc => {
         return new Promise((resolve, reject) => {
           var todoItem = doc.todos[todoId];
-          doc.todos.splice(todoId, 1);
+          doc.todos[todoId] = undefined;
           doc.save(function(err) {
             return resolve({id: todoId, message: todoItem.message});
           });
