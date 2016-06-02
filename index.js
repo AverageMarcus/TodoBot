@@ -68,7 +68,7 @@ function showHelp(unknownCommand) {
 
   return {
     text: helpMessage,
-    in_channel: false
+    response_type: 'ephemeral'
   };
 }
 
@@ -87,7 +87,7 @@ function showList(key, toChannel) {
 
   return {
     text: message,
-    in_channel: toChannel
+    response_type: toChannel ? 'in_channel' : 'ephemeral'
   };
 }
 
@@ -96,7 +96,7 @@ function addTodo(key, message) {
 
   return {
     text: `:white_medium_square: [${newTodo.id}] ${newTodo.message}`,
-    in_channel: false
+    response_type: 'ephemeral'
   };
 }
 
@@ -105,7 +105,7 @@ function completeTodo(key, todoId) {
 
   return {
     text: `:ballot_box_with_check: [${completedTodo.id}] ${completedTodo.message}\n`,
-    in_channel: false
+    response_type: 'ephemeral'
   };
 }
 
@@ -124,7 +124,7 @@ function removeTodo(key, todoId) {
 
   return {
     text: message,
-    in_channel: false
+    response_type: 'ephemeral'
   };
 }
 
