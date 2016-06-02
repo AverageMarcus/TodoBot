@@ -44,7 +44,7 @@ module.exports = {
 
             doc.todos.push(todoItem);
             doc.save(function(err) {
-              return resolve(todoItem);
+              return resolve({id: doc.todos.length, message: todoItem.message});
             });
           });
         });
