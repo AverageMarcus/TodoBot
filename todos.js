@@ -15,9 +15,6 @@ const userSchema = new Schema({
 });
 let UserTodos = connection.model('UserTodos', userSchema);
 
-// MVP
-let db = {};
-
 function ensureKeyExists(key) {
   return new Promise((resolve, reject) => {
     UserTodos.find({key: key}, function(err, docs) {
