@@ -92,7 +92,7 @@ module.exports = {
           UserTodos.findOne({key: key}, function(err, doc) {
             doc.todos = doc.todos.filter(todo => todo.id != todoId);
             doc.save(function(err) {
-              return resolve(doc.todos);
+              return resolve(doc.todos.filter(todo => todo.completed === undefined));
             });
           });
         });
