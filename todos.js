@@ -50,7 +50,7 @@ module.exports = {
   getTodos: function(key) {
     return ensureKeyExists(key)
       .then(doc => {
-        return doc.todos.filter(todo => todo.completed === undefined);
+        return doc.todos;
       });
   },
   completeTodo: function(key, todoId) {
