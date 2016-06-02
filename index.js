@@ -82,7 +82,7 @@ function showList(key, toChannel) {
         message = 'You currently have an empty todo list! :smile:';
       } else {
         for(let i=0; i<usersTodoList.length; i++) {
-          message += `:white_medium_square: [${i}] ${todo[i].message}\n`;
+          message += `:white_medium_square: [${i}] ${usersTodoList[i].message}\n`;
         }
       }
 
