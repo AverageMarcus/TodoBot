@@ -36,7 +36,7 @@ module.exports = {
           var todoItem = {
             message: message
           };
-          let newId = doc.todos.indexOf(-1);
+          let newId = doc.todos.indexOf(undefined);
           if(newId >= 0) {
             doc.todos[newId] = todoItem;
           } else {
@@ -52,7 +52,7 @@ module.exports = {
   getTodos: function(key) {
     return ensureKeyExists(key)
       .then(doc => {
-        return doc.todos.filter(todo => todo != -1);
+        return doc.todos.filter(todo => todo != undefined);
       });
   },
   completeTodo: function(key, todoId) {
@@ -64,7 +64,13 @@ module.exports = {
           }
           var todoItem = doc.todos[todoId];
           console.log(JSON.stringify(doc.todos));
-          doc.todos = doc.todos.map((todo, index) => index != todoId);
+          doc.todos = doc.todos.map((todo, index) => {
+            if(index != todoId) {
+              return undefined;
+            } else {
+              return todo;
+            }
+          });
           console.log(JSON.stringify(doc.todos));
           doc.save(function(err) {
             return resolve({id: todoId, message: todoItem.message});
