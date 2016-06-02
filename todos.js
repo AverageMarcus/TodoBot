@@ -4,14 +4,12 @@ const Schema = mongoose.Schema;
 const connection = mongoose.createConnection(process.env.MONGODB_URL);
 
 const todoSchema = new Schema({
-  id: Number,
   message: String,
   completed: Boolean
 });
 const userSchema = new Schema({
   key: String,
-  todos: [todoSchema],
-  itemIndex: {type: Number, default: 0}
+  todos: [todoSchema]
 });
 let UserTodos = connection.model('UserTodos', userSchema);
 
@@ -41,7 +39,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
           UserTodos.findOne({key: key}, function(err, doc) {
             var todoItem = {
-              id: ++doc.itemIndex,
               message: message
             };
 
@@ -68,15 +65,9 @@ module.exports = {
       .then(() => {
         return new Promise((resolve, reject) => {
           UserTodos.findOne({key: key}, function(err, doc) {
-            doc.todos = doc.todos.map(todo => {
-              if(todo.id == todoId) {
-                todo.completed = true;
-              }
-              return todo;
-            });
-            var returnItem = doc.todos.find(todo => todo.id == todoId);
+            doc.todos[todoId].completed = true;
             doc.save(function(err) {
-              return resolve(returnItem);
+              return resolve(doc.todos[todoId]);
             });
           });
         });
@@ -87,7 +78,7 @@ module.exports = {
       .then(() => {
         return new Promise((resolve, reject) => {
           UserTodos.findOne({key: key}, function(err, doc) {
-            doc.todos = doc.todos.filter(todo => todo.id != todoId);
+            doc.todos.splice(todoId, 1);
             doc.save(function(err) {
               return resolve(doc.todos.filter(todo => todo.completed === undefined));
             });

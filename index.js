@@ -84,8 +84,8 @@ function showList(key, toChannel) {
       if(!usersTodoList || !usersTodoList.length) {
         message = 'You currently have an empty todo list! :smile:';
       } else {
-        for(let todo of usersTodoList) {
-          message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
+        for(let i=0; i<usersTodoList.length; i++) {
+          message += `:white_medium_square: [${i}] ${todo[i].message}\n`;
         }
       }
 
@@ -125,8 +125,8 @@ function removeTodo(key, todoId) {
       if(!usersTodoList || !usersTodoList.length) {
         message = 'You currently have an empty todo list! :smile:';
       } else {
-        for(let todo of usersTodoList) {
-          message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
+        for(let i=0; i<usersTodoList.length; i++) {
+          message += `:white_medium_square: [${i}] ${todo[i].message}\n`;
         }
       }
 
