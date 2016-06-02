@@ -40,6 +40,7 @@ module.exports = {
           var newId = doc.todos.findIndex(todo => todo == undefined);
 
           if(newId >= 0) {
+            todoItem.id = newId;
             doc.todos = doc.todos.map((todo, index) => {
               if(index == newId) {
                 return todoItem;
@@ -48,12 +49,13 @@ module.exports = {
               }
             });
           } else {
+            newId = doc.todos.length;
+            todoItem.id = newId;
             doc.todos.push(todoItem);
-            newId = doc.todos.length - 1;
           }
 
           doc.save(function(err) {
-            return resolve({id: newId, message: todoItem.message});
+            return resolve({id: todoItem.id, message: todoItem.message});
           });
         });
       });
@@ -80,7 +82,7 @@ module.exports = {
             }
           });
           doc.save(function(err) {
-            return resolve({id: todoId, message: todoItem.message});
+            return resolve({id: todoItem.id, message: todoItem.message});
           });
         });
       });
