@@ -65,22 +65,10 @@ module.exports = {
       .then(() => {
         return new Promise((resolve, reject) => {
           UserTodos.findOne({key: key}, function(err, doc) {
-            doc.todos[todoId].completed = true;
-            doc.save(function(err) {
-              return resolve(doc.todos[todoId]);
-            });
-          });
-        });
-      });
-  },
-  removeTodo: function(key, todoId) {
-    return ensureKeyExists(key)
-      .then(() => {
-        return new Promise((resolve, reject) => {
-          UserTodos.findOne({key: key}, function(err, doc) {
+            var todoItem = doc.todos[todoId];
             doc.todos.splice(todoId, 1);
             doc.save(function(err) {
-              return resolve(doc.todos.filter(todo => todo.completed === undefined));
+              return resolve(todoItem);
             });
           });
         });

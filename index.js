@@ -118,17 +118,9 @@ function completeTodo(key, todoId) {
 }
 
 function removeTodo(key, todoId) {
-  return todos.removeTodo(key, todoId)
-    .then(usersTodoList => {
-      let message = 'Removed todo from your list\n';
-
-      if(!usersTodoList || !usersTodoList.length) {
-        message = 'You currently have an empty todo list! :smile:';
-      } else {
-        for(let i=0; i<usersTodoList.length; i++) {
-          message += `:white_medium_square: [${i}] ${todo[i].message}\n`;
-        }
-      }
+  return todos.completeTodo(key, todoId)
+    .then(removedTodo => {
+      let message = 'Removed todo from your list';
 
       return {
         text: message,
