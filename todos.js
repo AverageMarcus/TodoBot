@@ -42,7 +42,7 @@ module.exports = {
 
           doc.todos.push(todoItem);
           doc.save(function(err) {
-            return resolve({id: doc.todos.length, message: todoItem.message});
+            return resolve({id: doc.todos.length-1, message: todoItem.message});
           });
         });
       });
