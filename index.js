@@ -75,10 +75,18 @@ function showHelp(unknownCommand) {
 function showList(key, toChannel) {
   let usersTodoList = todos.getTodos(key);
 
-  // TODO: Format todos
+  let message;
+
+  if(!usersTodoList || !usersTodoList.length) {
+    message = 'You currently have an empty todo list! :smile:';
+  } else {
+    for(let todo of usersTodoList) {
+      message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
+    }
+  }
 
   return {
-    text: '',
+    text: message,
     in_channel: toChannel
   };
 }
@@ -89,29 +97,37 @@ function addTodo(key, message) {
   // TODO: Display new todo
 
   return {
-    text: '',
+    text: `:white_medium_square: [${todo.id}] ${todo.message}`,
     in_channel: false
   };
 }
 
 function completeTodo(key, todoId) {
-  todos.completeTodo(key, todoId);
+  let completedTodo = todos.completeTodo(key, todoId);
 
   // TODO: Show completed todo
 
   return {
-    text: '',
+    text: `:ballot_box_with_check: [${completedTodo.id}] ${completedTodo.message}\n`,
     in_channel: false
   };
 }
 
 function removeTodo(key, todoId) {
-  todos.removeTodo(key, todoId);
+  let usersTodoList = todos.removeTodo(key, todoId);
 
-  // TODO: Confirm remove
+  let message = 'Removed todo from your list\n';
+
+  if(!usersTodoList || !usersTodoList.length) {
+    message = 'You currently have an empty todo list! :smile:';
+  } else {
+    for(let todo of usersTodoList) {
+      message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
+    }
+  }
 
   return {
-    text: '',
+    text: message,
     in_channel: false
   };
 }
