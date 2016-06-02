@@ -34,8 +34,7 @@ server.route({
     if(validActions.hasOwnProperty(action)) {
       switch(action) {
         case 'help':
-          response = showHelp();
-          break;
+          return handleResponse(showHelp());
         case 'list':
           return showList(key)
             .then(response => handleResponse(response));
