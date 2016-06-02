@@ -46,17 +46,15 @@ server.route({
           return addTodo(key, message)
             .then(response => handleResponse(response));
         case 'complete':
-          response = completeTodo(key, message);
-          break;
+          return completeTodo(key, message)
+            .then(response => handleResponse(response));
         case 'remove':
-          response = removeTodo(key, message);
-          break;
+          return removeTodo(key, message)
+            .then(response => handleResponse(response));
       }
     } else {
-      response = showHelp(true);
+      return handleResponse(showHelp(true));
     }
-
-    reply(response).header('Content-Type', 'application/json');
   }
 });
 
