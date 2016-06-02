@@ -5,7 +5,8 @@ const connection = mongoose.createConnection(process.env.MONGODB_URL);
 
 const todoSchema = new Schema({
   id: Number,
-  message: String
+  message: String,
+  completed: Boolean
 });
 const userSchema = new Schema({
   key: String,
@@ -70,14 +71,13 @@ module.exports = {
       .then(() => {
         return new Promise((resolve, reject) => {
           UserTodos.findOne({key: key}, function(err, doc) {
-            var returnItem;
-            for(let todoItem of doc.todos) {
-              if(todoItem.id == todoId) {
-                todoItem.completed = true;
-                returnItem = todoItem;
-                break;
+            doc.todos = doc.todos.map(todo => {
+              if(todo.id == todoId) {
+                todo.completed = true;
               }
-            }
+              return todo;
+            });
+            var returnItem = doc.todos.find(todo => todo.id == todoId);
             doc.save(function(err) {
               return resolve(returnItem);
             });
