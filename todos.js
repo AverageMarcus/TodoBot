@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const connection = mongoose.createConnection(process.env.MONGODB_URL);
 
 const todoSchema = new Schema({
-  message: String,
-  completed: Boolean
+  message: String
 });
 const userSchema = new Schema({
   key: String,
