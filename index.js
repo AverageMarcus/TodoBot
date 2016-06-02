@@ -22,7 +22,7 @@ server.route({
     let key = `${teamId}_${userId}`;
     let usersText = (request.payload.text || '').trim();
 
-    let action = usersText.substring(0, usersText.indexOf(' ')).trim().toLowerCase();
+    let action = usersText.split(' ')[0].trim().toLowerCase();
     let message = usersText.substring(usersText.indexOf(' ')).trim();
 
     let response;
