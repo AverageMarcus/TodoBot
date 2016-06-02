@@ -62,6 +62,9 @@ module.exports = {
     return ensureKeyExists(key)
       .then(doc => {
         return new Promise((resolve, reject) => {
+          if(todoId >= doc.todos.length) {
+            return reject();
+          }
           var todoItem = doc.todos[todoId];
           doc.todos[todoId] = undefined;
           doc.save(function(err) {

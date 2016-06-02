@@ -46,10 +46,12 @@ server.route({
             .then(response => handleResponse(response));
         case 'complete':
           return completeTodo(key, message)
-            .then(response => handleResponse(response));
+            .then(response => handleResponse(response))
+            .catch(() => handleResponse({text: 'Invalid ID specified'}));
         case 'remove':
           return removeTodo(key, message)
-            .then(response => handleResponse(response));
+            .then(response => handleResponse(response))
+            .catch(() => handleResponse({text: 'Invalid ID specified'}));
       }
     } else {
       return handleResponse(showHelp(true));
