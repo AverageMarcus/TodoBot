@@ -63,7 +63,9 @@ module.exports = {
             return reject();
           }
           var todoItem = doc.todos[todoId];
-          doc.todos[todoId] = -1;
+          console.log(JSON.stringify(doc.todos));
+          doc.todos = doc.todos.map((todo, index) => index != todoId);
+          console.log(JSON.stringify(doc.todos));
           doc.save(function(err) {
             return resolve({id: todoId, message: todoItem.message});
           });
