@@ -61,7 +61,7 @@ module.exports = {
           var todoItem = doc.todos[todoId];
           doc.todos.splice(todoId, 1);
           doc.save(function(err) {
-            return resolve(todoItem);
+            return resolve({id: todoId, message: todoItem.message});
           });
         });
       });
