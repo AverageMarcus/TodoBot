@@ -27,20 +27,24 @@ server.route({
 
     let response;
 
+    function handleResponse(response) {
+      reply(response).header('Content-Type', 'application/json');
+    }
+
     if(validActions.hasOwnProperty(action)) {
       switch(action) {
         case 'help':
           response = showHelp();
           break;
         case 'list':
-          response = showList(key);
-          break;
+          return showList(key)
+            .then(response => handleResponse(response));
         case 'show':
-          response = showList(key, true);
-          break;
+          return showList(key, true)
+            .then(response => handleResponse(response));
         case 'add':
-          response = addTodo(key, message);
-          break;
+          return addTodo(key, message)
+            .then(response => handleResponse(response));
         case 'complete':
           response = completeTodo(key, message);
           break;
@@ -73,59 +77,64 @@ function showHelp(unknownCommand) {
 }
 
 function showList(key, toChannel) {
-  let usersTodoList = todos.getTodos(key);
+  return todos.getTodos(key)
+    .then((usersTodoList) => {
+      let message = '';
 
-  let message = '';
+      if(!usersTodoList || !usersTodoList.length) {
+        message = 'You currently have an empty todo list! :smile:';
+      } else {
+        for(let todo of usersTodoList) {
+          message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
+        }
+      }
 
-  if(!usersTodoList || !usersTodoList.length) {
-    message = 'You currently have an empty todo list! :smile:';
-  } else {
-    for(let todo of usersTodoList) {
-      message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
-    }
-  }
-
-  return {
-    text: message,
-    response_type: toChannel ? 'in_channel' : 'ephemeral'
-  };
+      return {
+        text: message,
+        response_type: toChannel ? 'in_channel' : 'ephemeral'
+      };
+    });
 }
 
 function addTodo(key, message) {
-  let newTodo = todos.addTodo(key, message);
+  return todos.addTodo(key, message)
+    .then(newTodo => {
+      return {
+        text: `:white_medium_square: [${newTodo.id}] ${newTodo.message}`,
+        response_type: 'ephemeral'
+      };
+    });
 
-  return {
-    text: `:white_medium_square: [${newTodo.id}] ${newTodo.message}`,
-    response_type: 'ephemeral'
-  };
 }
 
 function completeTodo(key, todoId) {
-  let completedTodo = todos.completeTodo(key, todoId);
-
-  return {
-    text: `:ballot_box_with_check: [${completedTodo.id}] ${completedTodo.message}\n`,
-    response_type: 'ephemeral'
-  };
+  return todos.completeTodo(key, todoId)
+    .then(completedTodo => {
+      return {
+        text: `:ballot_box_with_check: [${completedTodo.id}] ${completedTodo.message}\n`,
+        response_type: 'ephemeral'
+      };
+    });
 }
 
 function removeTodo(key, todoId) {
-  let usersTodoList = todos.removeTodo(key, todoId);
+  return todos.removeTodo(key, todoId)
+    .then(usersTodoList => {
+      let message = 'Removed todo from your list\n';
 
-  let message = 'Removed todo from your list\n';
+      if(!usersTodoList || !usersTodoList.length) {
+        message = 'You currently have an empty todo list! :smile:';
+      } else {
+        for(let todo of usersTodoList) {
+          message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
+        }
+      }
 
-  if(!usersTodoList || !usersTodoList.length) {
-    message = 'You currently have an empty todo list! :smile:';
-  } else {
-    for(let todo of usersTodoList) {
-      message += `:white_medium_square: [${todo.id}] ${todo.message}\n`;
-    }
-  }
-
-  return {
-    text: message,
-    response_type: 'ephemeral'
-  };
+      return {
+        text: message,
+        response_type: 'ephemeral'
+      };
+    });
 }
 
 server.start((err) => {
