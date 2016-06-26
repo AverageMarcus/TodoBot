@@ -1,7 +1,7 @@
 "use strict";
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const connection = mongoose.createConnection(process.env.MONGODB_URL);
+const connection = mongoose.createConnection(process.env.MONGO_URL);
 
 const userSchema = new Schema({
   key: String,
